@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Spell Check & Algorithm Studio</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- =====================================================================
+         HEADER & GLOBAL NAVIGATION
+         ===================================================================== -->
+    <header class="app-header">
+        <div class="container">
+            <div class="header-top">
+                <div class="brand-wrapper">
+                    <div class="brand-icon">DSA</div>
+                    <div class="brand-text">
+                        <h1>DSA String & Flow Algorithm Studio</h1>
+                        <p>Dictionary Error Detection • KMP • Aho-Corasick • Edmonds-Karp • Dinic's Algorithm</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div id="dict-status">
+                        <span class="badge badge-success">✓ Full Dictionary Loaded: 370,105 words</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Topic Navigation Tabs -->
+            <nav class="nav-tabs-wrapper">
+                <button class="nav-tab-btn active" data-target="spellcheck">
+                    Spell Checker (Trie + Top-3 DP)
+                </button>
+                <button class="nav-tab-btn" data-target="kmp">
+                    KMP Error &amp; Index Locator
+                </button>
+                <button class="nav-tab-btn" data-target="ahocorasick">
+                    Aho-Corasick Multi-Pattern Matcher
+                </button>
+                <button class="nav-tab-btn" data-target="maxflow">
+                    Max Flow Suggestions (Edmonds-Karp &amp; Dinic)
+                </button>
+                <button class="nav-tab-btn" data-target="comparison">
+                    Algorithm Comparison &amp; Benchmark
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- =====================================================================
+         MAIN WORKSPACE CONTENT
+         ===================================================================== -->
+    <main class="main-content">
+        <div class="container">
+
+            <!-- Shared Text Input Card (Used Across All Algorithms) -->
+            <div class="card">
+                <div class="input-controls-row">
+                    <span class="presets-label">Quick Test Presets:</span>
+                    <div class="presets-list">
+                        <button class="preset-btn" data-text="wat is yoe nama and I recieve a mesage">Preset 1: Demo ("wat is yoe nama...")</button>
+                        <button class="preset-btn" data-text="I have a graet ideea for our dsa porject">Preset 2: Project Typos</button>
+                        <button class="preset-btn" data-text="thier freind will accomodate us untill tomorrow">Preset 3: Frequent Errors</button>
+                        <button class="preset-btn" data-text="recieve relieve mesage manage">Preset 4: Flow Collisions</button>
+                    </div>
+                </div>
+
+                <textarea id="spell-text-input" class="text-editor-box" placeholder="Type or paste any sentence to test error detection and suggestions in real-time...">wat is yoe nama and I recieve a mesage</textarea>
+
+                <div class="editor-action-bar">
+                    <button id="apply-all-fixes-btn" class="btn-primary">
+                        Auto-Apply All Top-1 Corrections
+                    </button>
+                </div>
+            </div>
+
+            <!-- =================================================================
+                 SECTION 1: SPELL CHECKER (Trie + DP Top-3 Suggestions)
+                 ================================================================= -->
+            <section id="spellcheck" class="topic-section active">
+                <div class="section-banner">
+                    <h2>Dictionary-Based Spell Checker (Trie + Edit Distance)</h2>
+                    <p>
+                        Tokenizes input text and queries each token in the <strong>Trie (O(L))</strong>. When a word is missing from the lexicon,
+                        the <strong>SuggestionEngine</strong> calculates <strong>Damerau-Levenshtein Edit Distance</strong> via Dynamic Programming
+                        with <strong>Soundex phonetic tie-breaking</strong>, ranking the <strong>Top 3 Suggestions</strong> for instant replacement.
+                    </p>
+                </div>
+
+                <!-- Real-Time Metrics Bar -->
+                <div id="spell-stats-bar" class="stats-grid"></div>
+
+                <!-- Text Preview with wavy red underline -->
+                <div class="card">
+                    <div class="card-title">Document Highlighted Preview</div>
+                    <div id="highlighted-text-preview" class="preview-container"></div>
+                </div>
+
+                <!-- Top 3 Suggestions Container -->
+                <div class="card">
+                    <div class="card-title">
+                        <span>Top 3 Ranked Suggestions per Detected Error</span>
+                        <span class="badge badge-info">Click any suggestion pill to replace in text</span>
+                    </div>
+                    <div id="top-suggestions-container" class="top-suggestions-grid"></div>
+                </div>
+            </section>
+
+            <!-- =================================================================
+                 SECTION 2: KMP ERROR & INDEX LOCATOR
+                 ================================================================= -->
+            <section id="kmp" class="topic-section">
+                <div class="section-banner">
+                    <h2>KMP (Knuth-Morris-Pratt) — Automatic Error Detection &amp; Index Locator</h2>
+                    <p>
+                        Automatically detects all misspelled words using Trie dictionary lookup, then runs
+                        <strong>KMP (Knuth-Morris-Pratt)</strong> on each detected error to find its precise
+                        <strong>[start...end] character indices</strong>, line/column coordinates, and surrounding
+                        context. Also shows the <strong>LPS (Longest Prefix-Suffix) Table</strong> built per
+                        error pattern and the <strong>Top 3 Suggestions</strong> per error. Time: <strong>O(n + m)</strong> — zero backtracking.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span>KMP Error Index Detection Results</span>
+                        <span id="kmp-run-info" class="badge badge-secondary"></span>
+                    </div>
+                    <div id="kmp-results-container">
+                        <p style="color: var(--text-secondary); font-size: 14px;">
+                            Select the KMP tab — all spelling errors are detected and indexed automatically.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">LPS Tables (One per Error Word)</div>
+                    <div id="kmp-lps-container"></div>
+                </div>
+            </section>
+
+            <!-- =================================================================
+                 SECTION 3: AHO-CORASICK MULTI-MATCHER
+                 ================================================================= -->
+            <section id="ahocorasick" class="topic-section">
+                <div class="section-banner">
+                    <h2>Aho-Corasick — Automatic Multi-Pattern Error Scanner</h2>
+                    <p>
+                        Automatically detects all misspelled words using Trie dictionary lookup, builds the
+                        <strong>Aho-Corasick Automaton</strong> from all detected error words, then scans the
+                        entire text in a single pass of <strong>O(n + z)</strong> time — matching ALL error
+                        patterns simultaneously using <strong>BFS Failure Links</strong> and <strong>Dictionary
+                        Output Links</strong>. Reports every match with its exact character indices.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span>Aho-Corasick Multi-Pattern Detection Results</span>
+                        <span id="ac-run-info" class="badge badge-secondary"></span>
+                    </div>
+                    <div id="ac-results-container">
+                        <p style="color: var(--text-secondary); font-size: 14px;">
+                            Select the Aho-Corasick tab — all spelling errors are detected and matched automatically.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =================================================================
+                 SECTION 4: MAX FLOW SUGGESTION ENGINE (Edmonds-Karp & Dinic)
+                 ================================================================= -->
+            <section id="maxflow" class="topic-section">
+                <div class="section-banner">
+                    <h2>Network Flow (Max Flow) Bipartite Suggestion Matcher</h2>
+                    <p>
+                        <strong>How Max Flow Gives Suggestions:</strong> In complex sentences with multiple spelling errors, greedy individual word
+                        correction can cause collisions where two errors compete for the same dictionary word. By modeling error repair as a 
+                        <strong>Maximum Bipartite Matching Network</strong> (Source S ➜ Errors ➜ Candidate Suggestions ➜ Sink T), Max Flow finds the
+                        globally optimal, collision-free assignment.
+                    </p>
+                </div>
+
+                <!-- Interactive SVG Flow Graph -->
+                <div id="flow-graph-container"></div>
+
+                <!-- Sub Algorithm Tabs -->
+                <div class="card">
+                    <div class="sub-algo-tabs">
+                        <button id="ek-tab-btn" class="sub-algo-tab-btn active">
+                            1. Edmonds-Karp Detailed Augmenting Paths (BFS)
+                        </button>
+                        <button id="dinic-tab-btn" class="sub-algo-tab-btn">
+                            2. Dinic's Algorithm Level Graphs &amp; Blocking Flows (BFS + DFS)
+                        </button>
+                    </div>
+
+                    <!-- Edmonds-Karp View -->
+                    <div id="ek-view">
+                        <div id="ek-paths-container"></div>
+                    </div>
+
+                    <!-- Dinic's Algorithm View -->
+                    <div id="dinic-view" class="hidden">
+                        <div id="dinic-phases-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =================================================================
+                 SECTION 5: ALGORITHM COMPARISON MATRIX & BENCHMARK
+                 ================================================================= -->
+            <section id="comparison" class="topic-section">
+                <div class="section-banner">
+                    <h2>Algorithm Comparison Matrix &amp; High-Precision Benchmark</h2>
+                    <p>
+                        Comprehensive breakdown comparing Time Complexity, Space Complexity, Methodology, Output Formats, and Real-World Trade-offs
+                        across all project algorithms. Includes a live browser micro-benchmark runner.
+                    </p>
+                </div>
+
+                <!-- Live Benchmark Runner -->
+                <div class="card">
+                    <div class="card-title">
+                        <span>Live Performance Micro-Benchmark</span>
+                        <button id="run-benchmark-btn" class="btn-primary">Run Benchmark on Current Text</button>
+                    </div>
+                    <div id="benchmark-results-container">
+                        <p style="color: var(--text-secondary); font-size: 14px;">Click the button above to execute all algorithms live and measure real execution times with microsecond precision.</p>
+                    </div>
+                </div>
+
+                <!-- Detailed Matrix Table -->
+                <div class="card">
+                    <div class="card-title">Detailed Theoretical Comparison Matrix</div>
+                    <div class="comparison-table-wrapper">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Algorithm & Syllabus CO</th>
+                                    <th>Time Complexity</th>
+                                    <th>Space Complexity</th>
+                                    <th>Methodology</th>
+                                    <th>Output Format</th>
+                                    <th>Accuracy & Reliability</th>
+                                    <th>Best Real-World Use Case</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparison-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+
+        </div>
+    </main>
+
+    <!-- Scripts (Ordered by dependency) -->
+    <script src="js/dictionary_data.js"></script>
+    <script src="js/dictionary.js"></script>
+    <script src="js/trie.js"></script>
+    <script src="js/suggestionEngine.js"></script>
+    <script src="js/kmp.js"></script>
+    <script src="js/ahoCorasick.js"></script>
+    <script src="js/maxFlow.js"></script>
+    <script src="js/comparison.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

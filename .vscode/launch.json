@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch DSA Website in Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceFolder}/index.html"
+        },
+        {
+            "name": "Launch DSA Website in Default Browser",
+            "type": "node",
+            "request": "launch",
+            "command": "open ${workspaceFolder}/index.html"
+        }
+    ]
+}
